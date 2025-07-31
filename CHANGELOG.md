@@ -2,7 +2,13 @@
 
 All notable changes to the "yesCode Stats" extension will be documented in this file.
 
-## [1.0.0] - 2025-01-31
+## [1.0.1] - 2025-08-01
+
+### Fixed
+- 修复 "Cannot find module 'axios'" 错误
+- 将 axios 依赖替换为 Node.js 内置的 https 模块，解决插件加载失败问题
+
+## [1.0.0] - 2025-08-01
 
 ### Added
 - 初始版本发布

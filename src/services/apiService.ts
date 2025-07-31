@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import axios from 'axios';
+import * as https from 'https';
 import { BalanceResponse, Stats } from '../models/stats';
 
 export class ApiService {
@@ -29,6 +29,53 @@ export class ApiService {
         this.apiKey = apiKey;
     }
 
+    private makeHttpsRequest(url: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const urlObj = new URL(url);
+            const options = {
+                hostname: urlObj.hostname,
+                port: urlObj.port || 443,
+                path: urlObj.pathname + urlObj.search,
+                method: 'GET',
+                headers: {
+                    'X-API-Key': this.apiKey,
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            const req = https.request(options, (res) => {
+                let data = '';
+
+                res.on('data', (chunk) => {
+                    data += chunk;
+                });
+
+                res.on('end', () => {
+                    if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+                        try {
+                            const jsonData = JSON.parse(data);
+                            resolve(jsonData);
+                        } catch (error) {
+                            reject(new Error('解析响应数据失败'));
+                        }
+                    } else if (res.statusCode === 401) {
+                        reject(new Error('无效的 API Token'));
+                    } else if (res.statusCode === 404) {
+                        reject(new Error('API 地址不存在'));
+                    } else {
+                        reject(new Error(`API 请求失败: 状态码 ${res.statusCode}`));
+                    }
+                });
+            });
+
+            req.on('error', (error) => {
+                reject(new Error(`网络请求失败: ${error.message}`));
+            });
+
+            req.end();
+        });
+    }
+
     async fetchBalance(): Promise<Stats | null> {
         if (!this.apiKey) {
             // 不显示警告，让初始设置流程处理
@@ -36,14 +83,8 @@ export class ApiService {
         }
 
         try {
-            const response = await axios.get<BalanceResponse>(this.apiEndpoint, {
-                headers: {
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                    'X-API-Key': this.apiKey
-                }
-            });
-
-            const data = response.data;
+            const data = await this.makeHttpsRequest(this.apiEndpoint) as BalanceResponse;
+            
             const config = vscode.workspace.getConfiguration('yescode-stats');
             const dailyLimit = config.get<number>('dailySubscriptionLimit', 100);
             const subscriptionUsed = dailyLimit - data.subscription_balance;
@@ -57,16 +98,10 @@ export class ApiService {
                 lastUpdated: new Date()
             };
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response?.status === 401) {
-                    throw new Error('无效的 API Token');
-                } else if (error.response?.status === 404) {
-                    throw new Error('API 地址不存在');
-                } else {
-                    throw new Error(`API 请求失败: ${error.message}`);
-                }
+            if (error instanceof Error) {
+                throw error;
             }
-            throw error;
+            throw new Error('未知错误');
         }
     }
 }
