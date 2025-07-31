@@ -1,0 +1,138 @@
+{
+  "name": "yescode-stats",
+  "displayName": "yesCode Stats",
+  "description": "监控 yesCode Claude API 使用量，实时显示余额和订阅使用情况",
+  "version": "1.0.0",
+  "publisher": "StevenQi",
+  "author": {
+    "name": "Steven Qi",
+    "email": "strani93@outlook.com"
+  },
+  "license": "MIT",
+  "icon": "resources/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StevenQi7/yesCode-Stats.git"
+  },
+  "bugs": {
+    "url": "https://github.com/StevenQi7/yesCode-Stats/issues"
+  },
+  "homepage": "https://github.com/StevenQi7/yesCode-Stats#readme",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "yesCode",
+    "Claude",
+    "API",
+    "usage",
+    "monitor",
+    "statistics",
+    "余额监控",
+    "使用统计"
+  ],
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://img.shields.io/badge/PRs-welcome-brightgreen.svg",
+      "href": "https://github.com/StevenQi7/yesCode-Stats/pulls",
+      "description": "PRs Welcome"
+    }
+  ],
+  "preview": false,
+  "qna": "marketplace",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "extensionKind": [
+    "ui"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "yescode-stats.refresh",
+        "title": "yesCode: 刷新数据",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "yescode-stats.configure",
+        "title": "yesCode: 设置",
+        "icon": "$(gear)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "yescodeStats",
+          "name": "yesCode 使用统计",
+          "icon": "$(graph)",
+          "contextualTitle": "yesCode 使用统计",
+          "welcome": "欢迎使用 yesCode 使用统计插件！\n\n请先点击上方的设置按钮 ⚙️ 配置你的 API Token 和每日订阅额度。"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "yescode-stats.refresh",
+          "when": "view == yescodeStats",
+          "group": "navigation"
+        },
+        {
+          "command": "yescode-stats.configure",
+          "when": "view == yescodeStats",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "yesCode 使用统计",
+      "properties": {
+        "yescode-stats.apiEndpoint": {
+          "type": "string",
+          "default": "https://co.yes.vg/api/v1/claude/balance",
+          "description": "API 接口地址"
+        },
+        "yescode-stats.refreshInterval": {
+          "type": "number",
+          "default": 60,
+          "minimum": 10,
+          "description": "自动刷新间隔（秒，最小10秒）"
+        },
+        "yescode-stats.dailySubscriptionLimit": {
+          "type": "number",
+          "default": 100,
+          "description": "每日订阅额度（用于计算当天使用百分比）"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.3",
+    "@vscode/test-electron": "^2.2.0"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  }
+}
