@@ -9,6 +9,9 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 resources/ICON_NEEDED.md
+resources/create-icon.html
+resources/left.png
+resources/down.png
 PUBLISH_CHECKLIST.md
 node_modules/**
 .git/**

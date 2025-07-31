@@ -8,7 +8,7 @@
     "name": "Steven Qi",
     "email": "strani93@outlook.com"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "icon": "resources/icon.png",
   "repository": {
     "type": "git",

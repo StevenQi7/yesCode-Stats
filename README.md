@@ -2,6 +2,9 @@
 
 监控 yesCode Claude API 使用量的 VS Code 扩展插件。
 
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/StevenQi.yescode-stats)](https://marketplace.visualstudio.com/items?itemName=StevenQi.yescode-stats)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/StevenQi7/yesCode-Stats/blob/main/LICENSE)
+
 ## 功能特性
 
 - 📊 **实时监控**：状态栏和侧边栏双重显示
@@ -10,13 +13,27 @@
 - 🔐 **安全存储**：API Token 存储在 VS Code 密钥库
 - 🔄 **自动刷新**：支持多种刷新周期
 
-## 快速开始
+## 效果展示
 
-### 安装运行
+### 侧边栏视图
+![侧边栏](resources/left.png)
+
+### 状态栏显示
+![状态栏](resources/down.png)
+
+## 安装
+
+### 从 VS Code 市场安装（推荐）
+
+1. 在 VS Code 扩展市场搜索 "yesCode Stats"
+2. 点击安装
+3. 或者使用命令：`ext install StevenQi.yescode-stats`
+
+### 从源码安装
 
 ```bash
 # 克隆项目
-git clone https://github.com/yourusername/yesCode-Stats.git
+git clone https://github.com/StevenQi7/yesCode-Stats.git
 cd yesCode-Stats
 
 # 安装依赖
@@ -79,10 +96,6 @@ A: 使用量 = (每日额度 - 当前余额) / 每日额度 × 100%
 **Q: API Token 安全吗？**  
 A: Token 存储在 VS Code 密钥库中，不会保存在配置文件。
 
-## 发布说明
-
-要发布此插件到 VS Code 市场，请查看 [PUBLISH_CHECKLIST.md](PUBLISH_CHECKLIST.md)
-
 ## License
 
-MIT
+Apache-2.0
