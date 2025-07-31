@@ -15,6 +15,11 @@ export class StatsProvider implements vscode.TreeDataProvider<StatsItem> {
         this._onDidChangeTreeData.fire();
     }
 
+    clear(): void {
+        this.stats = null;
+        this._onDidChangeTreeData.fire();
+    }
+
     private getProgressBar(percentage: number): string {
         const width = 10;
         const filled = Math.round((percentage / 100) * width);

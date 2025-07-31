@@ -24,6 +24,41 @@ export async function activate(context: vscode.ExtensionContext) {
         await refreshStats(apiService, statsProvider, statusBarManager);
     });
 
+    const resetAllCommand = vscode.commands.registerCommand('yescode-stats.resetAll', async () => {
+        const confirm = await vscode.window.showWarningMessage(
+            '确定要重置所有配置吗？这将清除 API Token 和所有设置。',
+            '确定重置',
+            '取消'
+        );
+        
+        if (confirm === '确定重置') {
+            // 清除 API Key
+            await context.secrets.delete('yescode-stats.apiKey');
+            
+            // 清除已看过设置的标记
+            await context.globalState.update('yescode-stats.hasSeenSetup', undefined);
+            
+            // 重置配置到默认值
+            const config = vscode.workspace.getConfiguration('yescode-stats');
+            await config.update('apiEndpoint', undefined, true);
+            await config.update('refreshInterval', undefined, true);
+            await config.update('dailySubscriptionLimit', undefined, true);
+            
+            // 清空状态栏
+            statusBarManager?.clear();
+            
+            // 清空树视图
+            statsProvider.clear();
+            
+            vscode.window.showInformationMessage('所有配置已重置！将重新载入窗口以应用更改...');
+            
+            // 重新载入窗口
+            setTimeout(() => {
+                vscode.commands.executeCommand('workbench.action.reloadWindow');
+            }, 1000);
+        }
+    });
+
     const configureCommand = vscode.commands.registerCommand('yescode-stats.configure', async () => {
         const options = ['设置 API Token', '设置 API 地址', '设置刷新周期', '设置每日订阅额度'];
         const selected = await vscode.window.showQuickPick(options, {
@@ -108,6 +143,7 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(refreshCommand);
+    context.subscriptions.push(resetAllCommand);
     context.subscriptions.push(configureCommand);
     context.subscriptions.push(statusBarManager);
 

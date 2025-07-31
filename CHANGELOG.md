@@ -4,6 +4,10 @@ All notable changes to the "yesCode Stats" extension will be documented in this 
 
 ## [1.0.2] - 2025-07-31
 
+### Added
+- 新增"重置所有配置"命令，方便用户清空所有设置和数据
+- 重置功能会清除 API Token、设置标记和所有配置项，并重新载入窗口
+
 ### Fixed
 - 修复初始设置逻辑问题
 - 确保只有在用户完成 API Key 设置后才标记已完成引导

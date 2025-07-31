@@ -66,6 +66,11 @@
         "command": "yescode-stats.configure",
         "title": "yesCode: 设置",
         "icon": "$(gear)"
+      },
+      {
+        "command": "yescode-stats.resetAll",
+        "title": "yesCode: 重置所有配置",
+        "icon": "$(trash)"
       }
     ],
     "views": {

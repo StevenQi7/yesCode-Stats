@@ -33,6 +33,11 @@ export class StatusBarManager {
         this.statusBarItem.tooltip = tooltip;
     }
 
+    clear() {
+        this.statusBarItem.text = '$(cloud) yesCode: 未配置';
+        this.statusBarItem.tooltip = '点击配置 yesCode 统计';
+    }
+
     dispose() {
         this.statusBarItem.dispose();
     }
