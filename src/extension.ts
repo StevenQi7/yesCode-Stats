@@ -179,10 +179,9 @@ async function runInitialSetup(
         '稍后设置'
     );
     
-    // 记录用户已看过设置引导
-    await context.globalState.update('yescode-stats.hasSeenSetup', true);
-    
     if (setupResult !== '开始设置') {
+        // 只有在用户选择"稍后设置"时才标记已看过设置引导
+        await context.globalState.update('yescode-stats.hasSeenSetup', true);
         vscode.window.showInformationMessage('你可以稍后通过点击侧边栏的设置按钮或使用命令 "yesCode: 设置" 进行配置。');
         return;
     }
@@ -206,6 +205,7 @@ async function runInitialSetup(
     
     if (!apiKey) {
         vscode.window.showWarningMessage('设置已取消。你可以稍后通过命令 "yesCode: 设置" 进行配置。');
+        // 用户取消了设置，不标记 hasSeenSetup，下次还会弹出
         return;
     }
     
@@ -227,13 +227,16 @@ async function runInitialSetup(
     });
     
     if (!dailyLimit) {
-        vscode.window.showWarningMessage('设置已取消。使用默认每日额度 $100。');
+        vscode.window.showInformationMessage('使用默认每日额度 $100。');
     } else {
         const config = vscode.workspace.getConfiguration('yescode-stats');
         await config.update('dailySubscriptionLimit', parseFloat(dailyLimit), true);
     }
     
     vscode.window.showInformationMessage('设置完成！开始获取使用统计数据...');
+    
+    // 只要设置了 API Key 就标记为已完成设置
+    await context.globalState.update('yescode-stats.hasSeenSetup', true);
     
     // 设置完成后刷新数据
     await refreshStats(apiService, statsProvider, statusBarManager);

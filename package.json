@@ -2,7 +2,7 @@
   "name": "yescode-stats",
   "displayName": "yesCode Stats",
   "description": "监控 yesCode Claude API 使用量，实时显示余额和订阅使用情况",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "StevenQi",
   "author": {
     "name": "Steven Qi",

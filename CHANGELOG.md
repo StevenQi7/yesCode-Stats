@@ -2,6 +2,13 @@
 
 All notable changes to the "yesCode Stats" extension will be documented in this file.
 
+## [1.0.2] - 2025-07-31
+
+### Fixed
+- 修复初始设置逻辑问题
+- 确保只有在用户完成 API Key 设置后才标记已完成引导
+- 修复用户取消设置后，下次启动不再弹出设置提示的问题
+
 ## [1.0.1] - 2025-08-01
 
 ### Fixed
